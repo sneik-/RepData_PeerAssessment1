@@ -20,19 +20,25 @@ hist(steps_daily$Steps, breaks=30, xlab="Daily steps", main="Histogram of daily 
 
 round(mean(steps_daily$Steps, na.rm=T))
 round(median(steps_daily$Steps, na.rm=T))
- 
-# What is the average daily activity pattern?
-
-## Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
-## the average number of steps taken, averaged across all days (y-axis)
-
-
 
 # Imputing missing values
 
 ## Calculate and report the total number of missing values in the dataset 
 ## (i.e. the total number of rows with NAs)
 
-rowSums(is.na(df))
+missingvalues <- which(rowSums(is.na(df))>0)
+df_NAs <-df[missingvalues,]
+dfNoNA <- df[(!missingvalues),]
+steps_median_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), FUN=median)
+
+# What is the average daily activity pattern?
+
+## Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
+## the average number of steps taken, averaged across all days (y-axis)
+
+ <- df[]
+steps_median_5minutes <- aggregate(df$steps, list(df$interval), FUN=median)
+
+
 
 ## 
