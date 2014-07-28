@@ -31,6 +31,7 @@ df_NAs <-df[missingvalues,]
 dfNoNA <- df[(!missingvalues),]
 steps_median_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), FUN=median)
 
+
 # What is the average daily activity pattern?
 
 ## Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
