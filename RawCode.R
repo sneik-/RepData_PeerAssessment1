@@ -1,4 +1,9 @@
-# Functions: 
+# load libraries
+
+install.packages("ggplot2")
+library(ggplot2)
+install.packages("reshape")
+library(reshape)
 
 ## 
 
@@ -12,15 +17,16 @@ df <- read.csv("activity.csv")
 ## analysis.
 ## Made the aggregation needed later here.
 
+missingvalues <- which(rowSums(is.na(df))>0)
 dfNA <-df[missingvalues,]
 dfNoNA <- df[-(missingvalues),]
 dfNA$steps <- NULL
 steps_mean_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
                                    FUN=mean)
 names(steps_mean_5minutes) <- c("interval", "steps")
-steps_median_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
-                                   FUN=median)
-names(steps_median_5minutes) <- c("interval", "steps")
+#steps_median_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
+#                                   FUN=median)
+#names(steps_median_5minutes) <- c("interval", "steps")
 
 # What is mean total number of steps taken per day?
 
@@ -57,7 +63,7 @@ mostActiveInterval <- subset(steps_mean_5minutes, steps==maxSteps)
 ## Calculate and report the total number of missing values in the dataset 
 ## (i.e. the total number of rows with NAs)
 
-missingvalues <- which(rowSums(is.na(df))>0)
+length(missingvalues)
 
 ##  Devise a strategy for filling in all of the missing values in the dataset. 
 ## The strategy does not need to be sophisticated. For example, you could use 
@@ -86,8 +92,18 @@ round(median(steps_sum_day, na.rm=T))
 ## and "weekend" indicating whether a given date is a weekday or weekend day.
 
 weekend <- c("Saturday", "Sunday")
+weekday <- ifelse(weekdays(as.Date(df_new$date)) %in% weekend, 
+               "weekend", "weekday")
+df_new$weekday <- as.factor(weekday)
 
-head(transform(df_new, weekday=ifelse(weekdays(as.Date(df_new$date)) 
-                                          %in% weekend, "weekend", "weekday")))
+## 2. Make a panel plot containing a time series plot (i.e. type = "l") 
+## of the 5-minute interval (x-axis) and the average number of steps taken, 
+## averaged across all weekday days or weekend days (y-axis).
+
+install.packages("reshape")
+library(reshape)
+mdf_new <- melt(df_new, id=c("interval","weekday"))
 
 
+library(lattice)
+xyplot(df_new$steps~df_new$interval|df_new$weekday, type="l")
