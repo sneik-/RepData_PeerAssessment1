@@ -1,11 +1,9 @@
-# load libraries
+# install and load libraries
 
 install.packages("ggplot2")
 library(ggplot2)
 install.packages("reshape")
 library(reshape)
-
-## 
 
 # Loading and preprocessing the data
 
@@ -24,9 +22,6 @@ dfNA$steps <- NULL
 steps_mean_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
                                    FUN=mean)
 names(steps_mean_5minutes) <- c("interval", "steps")
-#steps_median_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
-#                                   FUN=median)
-#names(steps_median_5minutes) <- c("interval", "steps")
 
 # What is mean total number of steps taken per day?
 
@@ -73,7 +68,7 @@ length(missingvalues)
 ## missing data filled in.
 
 
-dfNA <- merge(x = dfNA, y = steps_median_5minutes, by = "interval", all.x=TRUE)
+dfNA <- merge(x = dfNA, y = steps_mean_5minutes, by = "interval", all.x=TRUE)
 df_new <- rbind(dfNA,dfNoNA)
 
 ## Make a histogram of the total number of steps taken each day and Calculate and 
@@ -100,10 +95,18 @@ df_new$weekday <- as.factor(weekday)
 ## of the 5-minute interval (x-axis) and the average number of steps taken, 
 ## averaged across all weekday days or weekend days (y-axis).
 
-install.packages("reshape")
-library(reshape)
-mdf_new <- melt(df_new, id=c("interval","weekday"))
+#install.packages("reshape")
+#library(reshape)
+#mdf_new <- melt(df_new, id=c("interval","weekday"))
 
+weekdays <- subset(df_new, weekday=="weekday")
+weekend <- subset(df_new, weekday=="weekend")
+weekdays <- aggregate(weekdays$steps, list(weekdays$interval), FUN=mean)
+weekend <- aggregate(weekend$steps, list(weekend$interval), FUN=mean)
+names(weekdays) <- c("interval","steps")
+names(weekend) <- c("interval","steps")
+weekdays$name <- "weekday"
+weekend$name <- "weekend"
+x <- rbind(weekend, weekdays)
+ggplot() + facet_wrap(~name) + geom_line(data=x, aes(x=interval, y=steps))
 
-library(lattice)
-xyplot(df_new$steps~df_new$interval|df_new$weekday, type="l")
