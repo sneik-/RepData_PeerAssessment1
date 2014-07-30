@@ -2,8 +2,7 @@
 
 install.packages("ggplot2")
 library(ggplot2)
-install.packages("reshape")
-library(reshape)
+
 
 # Loading and preprocessing the data
 
@@ -95,9 +94,6 @@ df_new$weekday <- as.factor(weekday)
 ## of the 5-minute interval (x-axis) and the average number of steps taken, 
 ## averaged across all weekday days or weekend days (y-axis).
 
-#install.packages("reshape")
-#library(reshape)
-#mdf_new <- melt(df_new, id=c("interval","weekday"))
 
 weekdays <- subset(df_new, weekday=="weekday")
 weekend <- subset(df_new, weekday=="weekend")
