@@ -54,10 +54,8 @@ df_new <- rbind(dfNA,dfNoNA)
 
 steps_sum_day <- aggregate(df_new$steps, list(df_new$date), FUN=sum)
 hist(steps_sum_day$steps,steps_sum_day$date)
-
-
-round(mean(df_new$Steps, na.rm=T))
-round(median(df_new$Steps, na.rm=T))
+round(mean(steps_sum_day, na.rm=T))
+round(median(steps_sum_day, na.rm=T))
 
 # What is the average daily activity pattern?
 
