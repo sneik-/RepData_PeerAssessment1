@@ -17,8 +17,7 @@ missingvalues <- which(rowSums(is.na(df))>0)
 dfNA <-df[missingvalues,]
 dfNoNA <- df[-(missingvalues),]
 dfNA$steps <- NULL
-steps_mean_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), 
-                                   FUN=mean)
+steps_mean_5minutes <- aggregate(dfNoNA$steps, list(dfNoNA$interval), FUN=mean)
 names(steps_mean_5minutes) <- c("interval", "steps")
 ```
 
@@ -92,7 +91,8 @@ df_new <- rbind(dfNA,dfNoNA)
 4. Make a histogram of the total number of steps taken each day and Calculate and 
 report the mean and median total number of steps taken per day. Do these values 
 differ from the estimates from the first part of the assignment? What is the 
-impact of imputing missing data on the estimates of the total daily number of steps?
+impact of imputing missing data on the estimates of the total daily number of 
+steps?
 
 ```{r}
 steps_sum_day <- aggregate(df_new$steps, list(df_new$date), FUN=sum)
